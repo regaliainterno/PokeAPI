@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common'; // Necessário para diretivas como *ngFor (ex: ngFor, ngIf)
-// Importe APENAS os componentes Ionic que serão usados diretamente no TEMPLATE HTML desta página
+import { CommonModule } from '@angular/common';
 import {
   IonContent,
   IonHeader,
@@ -12,18 +11,21 @@ import {
   IonCard,
   IonImg,
   IonCardHeader,
-  IonCardTitle
+  IonCardTitle,
+  // NOVAS IMPORTAÇÕES PARA INFINITE SCROLL
+  IonInfiniteScroll,
+  IonInfiniteScrollContent
 } from '@ionic/angular/standalone';
 
-import { PokemonService } from '../services/pokemon.service'; // Importe o serviço PokemonService
+import { PokemonService } from '../services/pokemon.service';
 
 @Component({
-  selector: 'app-tab1', // O seletor HTML para este componente
-  templateUrl: 'tab1.page.html', // O arquivo HTML associado
-  styleUrls: ['tab1.page.scss'], // O arquivo de estilos SCSS associado
-  standalone: true, // Indica que este é um componente standalone do Angular
-  imports: [ // Módulos e Componentes que este componente standalone precisa para funcionar
-    CommonModule, // Para diretivas Angular como *ngFor
+  selector: 'app-tab1',
+  templateUrl: 'tab1.page.html',
+  styleUrls: ['tab1.page.scss'],
+  standalone: true,
+  imports: [
+    CommonModule,
     IonContent,
     IonHeader,
     IonToolbar,
@@ -34,49 +36,66 @@ import { PokemonService } from '../services/pokemon.service'; // Importe o servi
     IonCard,
     IonImg,
     IonCardHeader,
-    IonCardTitle
+    IonCardTitle,
+    // ADICIONE ESTES AO ARRAY DE IMPORTS
+    IonInfiniteScroll,
+    IonInfiniteScrollContent
   ]
 })
 export class Tab1Page implements OnInit {
-  pokemons: any[] = []; // Array para armazenar os dados dos Pokémons
-  offset: number = 0;   // Usado para a paginação: quantos itens pular
-  limit: number = 20;   // Usado para a paginação: quantos itens buscar por vez
+  pokemons: any[] = [];
+  offset: number = 0;
+  limit: number = 20; // Quantidade de Pokémons a carregar por vez
+  maxPokemons: number = 1000; // Um limite arbitrário para a PokeAPI (ela tem mais de 1000)
 
-  // Injeção de dependência: o Angular injetará uma instância de PokemonService aqui
   constructor(private pokemonService: PokemonService) {}
 
-  // ngOnInit é um hook de ciclo de vida do Angular, chamado uma vez após a inicialização do componente
   ngOnInit() {
-    console.log('Tab1Page: ngOnInit chamado. Iniciando carregamento de Pokémons.'); // Log para depuração
-    this.loadPokemons(); // Chama o método para carregar os Pokémons
+    console.log('Tab1Page: ngOnInit chamado. Iniciando carregamento de Pokémons.');
+    this.loadPokemons();
   }
 
-  // Método para carregar Pokémons da API
-  loadPokemons() {
-    // Chama o método getPokemonList do PokemonService
-    this.pokemonService.getPokemonList(this.offset, this.limit).subscribe({
-      // Função 'next' é chamada quando a API retorna dados com sucesso
-      next: (data) => {
-        console.log('Tab1Page: Dados brutos da API recebidos:', data); // Log para depuração
-        // Mapeia os dados recebidos para adicionar 'id' e 'imageUrl' a cada Pokémon
-        const newPokemons = data.map((pokemon: any) => {
-          // Extrai o ID do Pokémon da URL de detalhes (ex: "https://pokeapi.co/api/v2/pokemon/1/")
-          const urlParts = pokemon.url.split('/');
-          const id = urlParts[urlParts.length - 2]; // O ID é sempre o penúltimo segmento da URL
+  loadPokemons(event?: any) { // 'event' é opcional para a chamada inicial
+    if (this.pokemons.length >= this.maxPokemons) {
+      if (event) {
+        event.target.complete(); // Indica que não há mais dados
+      }
+      return;
+    }
 
-          pokemon.id = id; // Adiciona a propriedade 'id' ao objeto Pokémon
-          // Constrói a URL da imagem usando o ID do Pokémon
+    this.pokemonService.getPokemonList(this.offset, this.limit).subscribe({
+      next: (data) => {
+        console.log('Tab1Page: Dados brutos da API recebidos:', data);
+        const newPokemons = data.map((pokemon: any) => {
+          const urlParts = pokemon.url.split('/');
+          const id = urlParts[urlParts.length - 2];
+          pokemon.id = id;
           pokemon.imageUrl = `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`;
-          return pokemon; // Retorna o objeto Pokémon modificado
+          return pokemon;
         });
-        // Adiciona os novos Pokémons à lista existente, mantendo os anteriores (para paginação futura)
         this.pokemons = [...this.pokemons, ...newPokemons];
-        console.log('Tab1Page: Pokémons processados e prontos para exibição:', this.pokemons); // Log final para depuração
+        console.log('Tab1Page: Pokémons processados e prontos para exibição:', this.pokemons);
+
+        this.offset += this.limit; // Aumenta o offset para a próxima requisição
+
+        if (event) {
+          event.target.complete(); // Indica ao infinite scroll que o carregamento terminou
+          if (this.pokemons.length >= this.maxPokemons) {
+            event.target.disabled = true; // Desabilita o infinite scroll se atingir o limite
+          }
+        }
       },
-      // Função 'error' é chamada se houver um erro na requisição da API
       error: (err) => {
-        console.error('Tab1Page: Erro ao carregar Pokémons:', err); // Loga o erro no console
+        console.error('Tab1Page: Erro ao carregar Pokémons:', err);
+        if (event) {
+          event.target.complete(); // Em caso de erro, também finaliza o carregamento
+        }
       }
     });
+  }
+
+  // NOVO MÉTODO: Chamado pelo ion-infinite-scroll
+  loadMoreData(event: any) {
+    this.loadPokemons(event);
   }
 }
