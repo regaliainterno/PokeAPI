@@ -3,5 +3,13 @@
   "integrations": {
     "capacitor": {}
   },
-  "type": "angular-standalone"
+  "type": "angular",
+  "proxies": [
+    {
+      "path": "/pokemon-api",
+      "proxyUrl": "https://pokeapi.co/api/v2",
+      "changeOrigin": true,
+      "secure": false
+    }
+  ]
 }
