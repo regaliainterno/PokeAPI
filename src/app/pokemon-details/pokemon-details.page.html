@@ -1,13 +1,112 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
-    <ion-title>pokemon-details</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
+    </ion-buttons>
+    <ion-title>{{ pokemonDetails?.name | titlecase }}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">pokemon-details</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div *ngIf="pokemonDetails">
+    <ion-card class="pokemon-card-main ion-margin">
+      <ion-card-content class="ion-no-padding">
+        <ion-grid class="ion-no-padding">
+          <ion-row class="main-info-row ion-align-items-center ion-justify-content-center">
+            <ion-col size="12" class="ion-text-center ion-padding-top">
+              <ion-img
+                [src]="pokemonDetails.sprites?.other?.['official-artwork']?.front_default"
+                [alt]="pokemonDetails.name"
+                class="pokemon-main-image"
+              ></ion-img>
+            </ion-col>
+            <ion-col size="12" class="ion-text-center">
+              <h2>{{ pokemonDetails.name | titlecase }}</h2>
+              <p class="pokemon-id">#{{ pokemonDetails.id }}</p>
+            </ion-col>
+          </ion-row>
+
+          <ion-row class="type-row ion-justify-content-center ion-padding">
+            <ion-col size="auto" *ngFor="let type of pokemonDetails.types">
+              <ion-chip>{{ type.type.name | titlecase }}</ion-chip>
+            </ion-col>
+          </ion-row>
+
+          <ion-row class="basic-info-row ion-padding">
+            <ion-col size="6" class="ion-text-center">
+              <ion-label class="info-label">Altura:</ion-label>
+              <p>{{ pokemonDetails.height * 10 }} cm</p>
+            </ion-col>
+            <ion-col size="6" class="ion-text-center">
+              <ion-label class="info-label">Peso:</ion-label>
+              <p>{{ pokemonDetails.weight / 10 }} kg</p>
+            </ion-col>
+            <ion-col size="12" class="ion-text-center ion-padding-top">
+              <ion-label class="info-label">Habilidades:</ion-label>
+              <p>
+                <span *ngFor="let ability of pokemonDetails.abilities; last as isLast">
+                  {{ ability.ability.name | titlecase }}{{ isLast ? '' : ', ' }}
+                </span>
+              </p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="ion-margin">
+      <ion-card-header>
+        <ion-card-title>Estatísticas Base</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-list lines="none">
+          <ion-item *ngFor="let stat of pokemonDetails.stats">
+            <ion-label>{{ stat.stat.name | titlecase }}:</ion-label>
+            <ion-label slot="end">{{ stat.base_stat }}</ion-label>
+            <ion-progress-bar [value]="stat.base_stat / 200"></ion-progress-bar>
+          </ion-item>
+        </ion-list>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="ion-margin">
+      <ion-card-header>
+        <ion-card-title>Sprites Adicionais</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <ion-grid>
+          <ion-row class="ion-justify-content-center">
+            <ion-col size="4" class="ion-text-center" *ngIf="pokemonDetails.sprites?.front_shiny">
+              <ion-thumbnail>
+                <ion-img [src]="pokemonDetails.sprites.front_shiny" alt="Shiny Front"></ion-img>
+              </ion-thumbnail>
+              <ion-label>Shiny Front</ion-label>
+            </ion-col>
+            <ion-col size="4" class="ion-text-center" *ngIf="pokemonDetails.sprites?.back_default">
+              <ion-thumbnail>
+                <ion-img [src]="pokemonDetails.sprites.back_default" alt="Back Default"></ion-img>
+              </ion-thumbnail>
+              <ion-label>Back Default</ion-label>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+
+    <ion-card class="ion-margin">
+      <ion-card-header>
+        <ion-card-title>Movimentos (Em Breve)</ion-card-title>
+      </ion-card-header>
+      <ion-card-content>
+        <p>Detalhes dos movimentos serão adicionados aqui.</p>
+      </ion-card-content>
+    </ion-card>
+
+  </div>
+
+  <div *ngIf="!pokemonDetails" class="ion-padding ion-text-center">
+    <ion-spinner name="circles"></ion-spinner>
+    <p>Carregando detalhes do Pokémon...</p>
+  </div>
+
 </ion-content>

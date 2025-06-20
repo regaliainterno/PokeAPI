@@ -1,0 +1,117 @@
+ion-toolbar {
+  --background: #ffcb05; /* Amarelo Pokémon */
+  color: #2a75bb; /* Azul Pokémon */
+  ion-title {
+    font-weight: bold;
+  }
+  ion-back-button {
+    color: #2a75bb;
+  }
+}
+
+ion-content {
+  --background: #f0f0f0;
+
+  .pokemon-card-main {
+    background: linear-gradient(135deg, #f7f7f7, #e0e0e0); /* Gradiente para o fundo do cartão */
+    border: 3px solid #2a75bb; /* Borda azul mais proeminente */
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Sombra mais destacada */
+    margin-top: 20px;
+    padding-bottom: 0; /* Remover padding extra se for preciso */
+
+    ion-card-content {
+      padding: 0; // Remove o padding padrão do content do card
+    }
+
+    .main-info-row {
+      padding: 10px; // Padding interno para a grid principal
+      border-bottom: 1px solid #ddd; // Linha separadora
+    }
+
+    .pokemon-main-image {
+      width: 100%;
+      max-width: 200px; /* Limita o tamanho da imagem principal */
+      height: auto;
+      margin: 10px auto;
+      display: block;
+      filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.3)); /* Sombra na imagem */
+    }
+
+    h2 {
+      font-size: 1.8em;
+      font-weight: bold;
+      color: #333;
+      margin-bottom: 5px;
+    }
+
+    .pokemon-id {
+      font-size: 1.1em;
+      color: #666;
+      font-weight: 500;
+      margin-top: 0;
+    }
+
+    .type-row {
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      margin-bottom: 15px;
+      background: #fdfdfd; // Fundo levemente diferente para os tipos
+    }
+
+    ion-chip {
+      --background: #2a75bb; /* Azul */
+      color: white;
+      font-weight: bold;
+      padding: 5px 12px;
+      height: auto; // Permite que a altura se ajuste ao padding
+      font-size: 0.9em;
+    }
+
+    .basic-info-row {
+      padding-top: 10px;
+      padding-bottom: 20px;
+      text-align: center;
+
+      .info-label {
+        font-weight: bold;
+        color: #555;
+        font-size: 0.9em;
+      }
+      p {
+        margin-top: 5px;
+        font-size: 1em;
+        color: #333;
+      }
+    }
+  }
+
+  ion-card {
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  ion-list {
+    background: transparent;
+  }
+
+  ion-item {
+    --background: transparent;
+    --border-color: #eee;
+  }
+
+  ion-progress-bar {
+    height: 10px;
+    border-radius: 5px;
+    --background: #ddd;
+    --progress-background: #007bff; /* Pode variar por tipo/cor do Pokémon */
+  }
+
+  .ion-padding-vertical {
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+}
