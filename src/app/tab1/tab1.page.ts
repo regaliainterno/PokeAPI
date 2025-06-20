@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule } from '@angular/common'; // Necessário para diretivas como *ngFor
+// Importe APENAS os componentes Ionic que serão usados diretamente no TEMPLATE HTML desta página
 import {
   IonContent,
   IonHeader,
@@ -12,12 +13,13 @@ import {
   IonImg,
   IonCardHeader,
   IonCardTitle,
-  // NOVAS IMPORTAÇÕES PARA INFINITE SCROLL
   IonInfiniteScroll,
-  IonInfiniteScrollContent
+  IonInfiniteScrollContent,
+  IonRippleEffect // Para o efeito visual de clique no card
 } from '@ionic/angular/standalone';
+import { RouterLink } from '@angular/router'; // Importe RouterLink para usar [routerLink] no HTML
 
-import { PokemonService } from '../services/pokemon.service';
+import { PokemonService } from '../services/pokemon.service'; // Importe o serviço PokemonService
 
 @Component({
   selector: 'app-tab1',
@@ -26,6 +28,7 @@ import { PokemonService } from '../services/pokemon.service';
   standalone: true,
   imports: [
     CommonModule,
+    RouterLink, // Adicione RouterLink aqui
     IonContent,
     IonHeader,
     IonToolbar,
@@ -37,9 +40,9 @@ import { PokemonService } from '../services/pokemon.service';
     IonImg,
     IonCardHeader,
     IonCardTitle,
-    // ADICIONE ESTES AO ARRAY DE IMPORTS
     IonInfiniteScroll,
-    IonInfiniteScrollContent
+    IonInfiniteScrollContent,
+    IonRippleEffect // Adicione IonRippleEffect aqui
   ]
 })
 export class Tab1Page implements OnInit {
@@ -60,6 +63,7 @@ export class Tab1Page implements OnInit {
       if (event) {
         event.target.complete(); // Indica que não há mais dados
       }
+      console.log('Tab1Page: Limite máximo de Pokémons atingido.');
       return;
     }
 
@@ -94,7 +98,6 @@ export class Tab1Page implements OnInit {
     });
   }
 
-  // NOVO MÉTODO: Chamado pelo ion-infinite-scroll
   loadMoreData(event: any) {
     this.loadPokemons(event);
   }

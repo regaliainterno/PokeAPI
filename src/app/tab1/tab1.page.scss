@@ -1,0 +1,66 @@
+ion-content {
+  --background: #f0f0f0; /* Um fundo cinza claro */
+}
+
+ion-header {
+  ion-toolbar {
+    --background: #ffcb05; /* Amarelo Pokémon */
+    color: #2a75bb; /* Azul Pokémon */
+    ion-title {
+      font-weight: bold;
+    }
+  }
+}
+
+ion-grid {
+  padding: 10px;
+}
+
+ion-row {
+  display: flex;
+  flex-wrap: wrap; /* Quebra para a próxima linha em telas menores */
+}
+
+ion-col {
+  flex: 0 0 auto; /* Não crescer, não encolher, tamanho automático */
+  width: 50%; /* Dois Pokémons por linha em telas menores */
+  padding: 5px;
+
+  @media (min-width: 576px) { /* Para telas maiores (sm) */
+    width: 33.33%; /* Três Pokémons por linha */
+  }
+
+  @media (min-width: 768px) { /* Para telas maiores (md) */
+    width: 25%; /* Quatro Pokémons por linha */
+  }
+
+  @media (min-width: 992px) { /* Para telas maiores (lg) */
+    width: 20%; /* Cinco Pokémons por linha */
+  }
+}
+
+ion-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin: 0; /* Remove margens padrão do ion-card dentro do nosso layout */
+}
+
+ion-img {
+  max-width: 80%; /* Limita a largura da imagem dentro do card */
+  max-height: 150px; /* Limita a altura máxima da imagem */
+  margin-top: 10px;
+}
+
+ion-card-header {
+  padding: 10px;
+}
+
+ion-card-title {
+  font-size: 1em;
+  font-weight: bold;
+  margin-bottom: 0;
+}
