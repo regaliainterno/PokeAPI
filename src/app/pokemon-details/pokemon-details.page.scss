@@ -18,24 +18,24 @@ ion-content {
     border-radius: 15px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); /* Sombra mais destacada */
     margin-top: 20px;
-    padding-bottom: 0; /* Remover padding extra se for preciso */
+    padding-bottom: 0; 
 
     ion-card-content {
-      padding: 0; // Remove o padding padrão do content do card
+      padding: 0;
     }
 
     .main-info-row {
-      padding: 10px; // Padding interno para a grid principal
-      border-bottom: 1px solid #ddd; // Linha separadora
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
     }
 
     .pokemon-main-image {
       width: 100%;
-      max-width: 200px; /* Limita o tamanho da imagem principal */
+      max-width: 200px;
       height: auto;
       margin: 10px auto;
       display: block;
-      filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.3)); /* Sombra na imagem */
+      filter: drop-shadow(3px 3px 5px rgba(0, 0, 0, 0.3));
     }
 
     h2 {
@@ -58,15 +58,15 @@ ion-content {
       padding-top: 10px;
       padding-bottom: 10px;
       margin-bottom: 15px;
-      background: #fdfdfd; // Fundo levemente diferente para os tipos
+      background: #fdfdfd;
     }
 
     ion-chip {
-      --background: #2a75bb; /* Azul */
+      --background: #2a75bb;
       color: white;
       font-weight: bold;
       padding: 5px 12px;
-      height: auto; // Permite que a altura se ajuste ao padding
+      height: auto;
       font-size: 0.9em;
     }
 
@@ -107,7 +107,7 @@ ion-content {
     height: 10px;
     border-radius: 5px;
     --background: #ddd;
-    --progress-background: #007bff; /* Pode variar por tipo/cor do Pokémon */
+    --progress-background: #007bff;
   }
 
   .ion-padding-vertical {

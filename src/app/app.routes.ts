@@ -1,22 +1,20 @@
 import { Routes } from '@angular/router';
+import { Tab1Page } from './tab1/tab1.page'; // <-- Importe a Tab1Page
 
 export const routes: Routes = [
   {
-    path: '',
-    loadChildren: () => import('./tabs/tabs.routes').then((m) => m.routes),
+    path: '', // A rota raiz será a Tab1Page
+    loadComponent: () => import('./tab1/tab1.page').then(m => m.Tab1Page),
   },
-  // NOVA ROTA PARA DETALHES DO POKÉMON (iremos criar este componente a seguir)
   {
-    path: 'pokemon-details/:id', // :id é um parâmetro de rota
+    path: 'pokemon-details/:id', // A rota de detalhes permanece igual
     loadComponent: () =>
       import('./pokemon-details/pokemon-details.page').then((m) => m.PokemonDetailsPage),
   },
+  // Opcional: Adicionar um fallback para rotas não encontradas
   {
-    path: 'pokemon-details',
-    loadComponent: () => import('./pokemon-details/pokemon-details.page').then( m => m.PokemonDetailsPage)
-  },
-  {
-    path: 'pokemon-details',
-    loadComponent: () => import('./pokemon-details/pokemon-details.page').then( m => m.PokemonDetailsPage)
-  },
+    path: '**', // Coringa para qualquer outra rota não definida
+    redirectTo: '', // Redireciona para a raiz (Tab1Page)
+    pathMatch: 'full'
+  }
 ];

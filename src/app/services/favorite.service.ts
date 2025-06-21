@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
-import { Storage } from '@ionic/storage-angular';
-import { from, Observable, BehaviorSubject } from 'rxjs';
-import { switchMap, tap, map, filter } from 'rxjs/operators';
+import { Observable, BehaviorSubject, of } from 'rxjs'; 
+import { map, take } from 'rxjs/operators'; // <-- Adicione 'take' aqui
 
 const FAVORITES_KEY = 'my_favorites';
 
@@ -9,57 +8,81 @@ const FAVORITES_KEY = 'my_favorites';
   providedIn: 'root'
 })
 export class FavoriteService {
-  private _storage: Storage | null = null;
   private favoritesSubject = new BehaviorSubject<any[]>([]);
   favorites$: Observable<any[]> = this.favoritesSubject.asObservable();
 
-  constructor(private storage: Storage) {
+  constructor() { 
     this.init();
   }
 
   async init() {
-    // Cria a instância do storage
-    const storage = await this.storage.create();
-    this._storage = storage;
-    // Carrega os favoritos ao iniciar
-    this.loadFavorites();
-  }
-
-  private async loadFavorites() {
-    const favorites = await this._storage?.get(FAVORITES_KEY) || [];
-    this.favoritesSubject.next(favorites);
+    try {
+      const favoritesJson = localStorage.getItem(FAVORITES_KEY);
+      const favorites = favoritesJson ? JSON.parse(favoritesJson) : [];
+      this.favoritesSubject.next(favorites);
+      console.log('FavoriteService: localStorage inicializado com sucesso.');
+      console.log('FavoriteService: Favoritos carregados na inicialização:', favorites);
+    } catch (error) {
+      console.error('FavoriteService: ERRO ao inicializar localStorage!', error);
+      this.favoritesSubject.next([]); // Emite array vazio em caso de falha
+    }
   }
 
   getFavorites(): Observable<any[]> {
-    // Retorna o BehaviorSubject diretamente para reatividade
-    return this.favorites$;
+    // CORREÇÃO AQUI: Use take(1) para que o Observable complete após emitir o valor atual
+    return this.favorites$.pipe(take(1)); 
   }
 
   async isFavorite(pokemonId: number): Promise<boolean> {
-    const favorites = await this._storage?.get(FAVORITES_KEY) || [];
-    return favorites.some((fav: any) => fav.id === pokemonId);
+    try {
+      const favoritesJson = localStorage.getItem(FAVORITES_KEY);
+      const favorites = favoritesJson ? JSON.parse(favoritesJson) : [];
+      const result = favorites.some((fav: any) => fav.id === pokemonId);
+      console.log(`FavoriteService: Verificando se ${pokemonId} é favorito: ${result}`);
+      return result;
+    } catch (error) {
+      console.warn('FavoriteService: Erro ao verificar favorito no localStorage.', error);
+      return false;
+    }
   }
 
   async addFavorite(pokemon: any) {
-    let favorites = await this._storage?.get(FAVORITES_KEY) || [];
-    const exists = favorites.some((fav: any) => fav.id === pokemon.id);
+    try {
+      console.log(`FavoriteService: Tentando adicionar ${pokemon.name} (ID: ${pokemon.id}) aos favoritos.`);
+      const favoritesJson = localStorage.getItem(FAVORITES_KEY);
+      let favorites = favoritesJson ? JSON.parse(favoritesJson) : [];
+      const exists = favorites.some((fav: any) => fav.id === pokemon.id);
 
-    if (!exists) {
-      favorites = [...favorites, pokemon];
-      await this._storage?.set(FAVORITES_KEY, favorites);
-      this.favoritesSubject.next(favorites); // Notifica os subscribers
-      console.log(`Adicionado aos favoritos: ${pokemon.name}`);
+      if (!exists) {
+        favorites = [...favorites, pokemon];
+        localStorage.setItem(FAVORITES_KEY, JSON.stringify(favorites));
+        this.favoritesSubject.next(favorites);
+        console.log(`FavoriteService: Adicionado com sucesso: ${pokemon.name}. Nova lista:`, favorites);
+      } else {
+        console.log(`FavoriteService: ${pokemon.name} já é favorito.`);
+      }
+    } catch (error) {
+      console.warn('FavoriteService: Erro ao adicionar favorito ao localStorage.', error);
     }
   }
 
   async removeFavorite(pokemonId: number) {
-    let favorites = await this._storage?.get(FAVORITES_KEY) || [];
-    const updatedFavorites = favorites.filter((fav: any) => fav.id !== pokemonId);
+    try {
+      console.log(`FavoriteService: Tentando remover favorito com ID: ${pokemonId}.`);
+      const favoritesJson = localStorage.getItem(FAVORITES_KEY);
+      let favorites = favoritesJson ? JSON.parse(favoritesJson) : [];
+      const initialLength = favorites.length;
+      const updatedFavorites = favorites.filter((fav: any) => fav.id !== pokemonId);
 
-    if (updatedFavorites.length !== favorites.length) { // Se realmente removeu
-      await this._storage?.set(FAVORITES_KEY, updatedFavorites);
-      this.favoritesSubject.next(updatedFavorites); // Notifica os subscribers
-      console.log(`Removido dos favoritos: ${pokemonId}`);
+      if (updatedFavorites.length !== initialLength) { // Se realmente removeu algum item
+        localStorage.setItem(FAVORITES_KEY, JSON.stringify(updatedFavorites));
+        this.favoritesSubject.next(updatedFavorites);
+        console.log(`FavoriteService: Removido com sucesso ID: ${pokemonId}. Nova lista:`, updatedFavorites);
+      } else {
+        console.log(`FavoriteService: ID ${pokemonId} não encontrado nos favoritos ou lista já vazia.`);
+      }
+    } catch (error) {
+      console.warn('FavoriteService: Erro ao remover favorito do localStorage.', error);
     }
   }
 }

@@ -4,54 +4,63 @@ Este repositório contém a aplicação *mobile* e PWA (Progressive Web App) des
 
 ---
 
-Tecnologias Utilizadas
+#Tecnologias Utilizadas
 
 O projeto foi construído com as seguintes tecnologias principais:
 
 * **Ionic Framework**: Framework de UI *open source* para desenvolvimento de aplicativos móveis híbridos e PWAs.
 * **Angular**: Plataforma e *framework* para construir aplicações *single-page* robustas e escaláveis.
 * **PokeAPI v2**: Uma API REST abrangente e gratuita que fornece dados sobre Pokémons.
+* **RxJS**: Biblioteca para programação reativa, fundamental no Angular para manipulação de fluxos de dados.
+* **localStorage**: Utilizado para persistência de dados (como Pokémons favoritos) diretamente no navegador, garantindo funcionalidade robusta.
 
 ---
 
-Status do Projeto: Desenvolvimento em Andamento
+#Ciclo de Desenvolvimento do Projeto
 
-A aplicação Pokémon Explorer está em fase ativa de desenvolvimento, com funcionalidades essenciais já implementadas e prontas para uso. O foco inicial foi em estabelecer uma base sólida para a exploração de dados, e agora estamos incrementando as interações do usuário.
+Este projeto passou por diversas fases de implementação e depuração, refletindo um ciclo de desenvolvimento ágil e focado na resolução de desafios.
 
-**Principais funcionalidades já disponíveis:**
+### **Versão 0.1 — Base e Primeiro Contato**
+A fase inicial concentrou-se na configuração do ambiente e na exibição básica de dados:
+* Configuração do projeto Ionic com Angular (template de abas).
+* Configuração inicial do GitHub para controle de versão.
+* Criação e implementação do `PokemonService` para consumir a PokeAPI.
+* Exibição de uma lista inicial de Pokémons na `Tab1` (tela principal).
 
-* **Lista de Pokémons:** Visualização de uma lista organizada de Pokémons com nome e imagem, carregada de forma otimizada.
-* **Paginação com Infinite Scroll:** Carregamento contínuo de Pokémons à medida que o usuário rola a tela, garantindo uma experiência fluida.
-* **Tela de Detalhes do Pokémon:** Navegação para uma tela dedicada que exibe informações adicionais do Pokémon selecionado, como altura, peso, habilidades, estatísticas base e sprites variados. O layout está sendo trabalhado para se assemelhar a uma carta de Pokémon.
-* **Gerenciamento de Favoritos (Base):** A infraestrutura para marcar Pokémons como favoritos está configurada, utilizando armazenamento local persistente. Um botão de favoritar/desfavoritar já foi adicionado à tela de detalhes.
+### **Versão 0.2 — Aprimoramento da Lista e Navegação Essencial**
+Nesta etapa, a experiência da lista foi melhorada e a base para a navegação foi estabelecida:
+* Implementação de paginação com *Infinite Scroll* para carregamento contínuo da lista de Pokémons.
+* Estilização e organização visual dos cards de Pokémon na lista principal.
+* Implementação da navegação para uma tela de detalhes ao clicar em um Pokémon.
+* Geração da estrutura básica para a página de detalhes (`PokemonDetailsPage`).
 
-O repositório será continuamente atualizado com novas funcionalidades, melhorias na interface e experiência do usuário, e correções conforme o projeto avança.
+### **Versão 0.3 — Tela de Detalhes Detalhada e Início dos Favoritos**
+Foco na riqueza das informações do Pokémon e na introdução da persistência:
+* Desenvolvimento da `PokemonDetailsPage` para exibir informações adicionais (altura, peso, habilidades, estatísticas base, sprites).
+* Estilização da tela de detalhes para adotar um visual de "carta de Pokémon".
+* Início da implementação da funcionalidade de favoritos, com a configuração do `FavoriteService`.
+* Adição do botão de favoritar/desfavoritar na tela de detalhes.
+* **Desafios:** Enfrentamento de problemas complexos de inicialização de armazenamento (`Ionic Storage`) e de corrupção de URLs em tempo de execução, que exigiram depurações aprofundadas e uso de `localStorage` direto.
+
+### **Versão 1.0 — Funcionalidade Completa e Estabilidade**
+A versão final e totalmente funcional, com a funcionalidade de favoritos robusta e integrada:
+* **Resolução definitiva** dos problemas de inicialização de armazenamento, garantindo que os Pokémons sempre apareçam na lista principal.
+* **Funcionalidade completa de Favoritos:**
+    * Ícone visual de favorito/desfavoritar nos cards da lista principal.
+    * Uma lista dedicada de "Meus Favoritos" exibida condicionalmente na própria `Tab1` (tela principal).
+    * Comportamento dinâmico de favoritos: Pokémons favoritados **desaparecem** da lista "Todos os Pokémons" e **reaparecem** quando desfavoritados (após a atualização da lista).
+* **Refinamento do fluxo de dados RxJS**, garantindo que a lista e os favoritos sejam carregados e atualizados de forma eficiente e sem conflitos.
+* Otimizações de código e tratamento de warnings para um projeto limpo e pronto.
 
 ---
 
-Histórico de Desenvolvimento (Commits Recentes)
+#Status Atual: Projeto Funcional e Completo
 
-Abaixo, um resumo dos marcos de desenvolvimento mais recentes, refletidos nos commits:
-
-* `feat: Adiciona botão de favoritar/desfavoritar na tela de detalhes do Pokémon`
-* `feat: Adiciona tela de detalhes do Pokémon com informações básicas e sprites`
-* `feat: Implementa navegação para tela de detalhes do Pokémon`
-* `feat: Implementa paginação com infinite scroll na lista de Pokémons`
-* `feat: Exibe lista inicial de Pokémons na Tab1 com acesso direto à PokeAPI`
-* `feat: Implementa PokemonService para consumir a PokeAPI`
-* `feat: Initial project setup with Ionic and Angular (tabs template)`
+Todas as funcionalidades do escopo inicial foram implementadas e estão operacionais. O aplicativo oferece uma experiência fluida para explorar Pokémons, com favoritos persistentes e uma interface responsiva.
 
 ---
 
-Próximos Passos (Em Breve)
-
-* Criação de uma tela ou aba dedicada para visualizar a lista de Pokémons favoritos.
-* Ajustes finos na responsividade para diferentes orientações de tela e tamanhos de dispositivos.
-* Refinamentos no visual da tela de detalhes para o design de "carta" completo.
-
----
-
-Contato
+#Contato
 
 Se tiver alguma dúvida ou sugestão, sinta-se à vontade para entrar em contato:
 

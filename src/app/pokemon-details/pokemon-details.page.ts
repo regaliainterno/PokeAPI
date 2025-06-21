@@ -23,9 +23,14 @@ import {
   IonImg,
   IonChip,
   IonProgressBar,
-  IonSpinner // <-- Adicione esta linha
+  IonSpinner,
+  IonIcon,
+  IonButton
 } from '@ionic/angular/standalone';
 import { PokemonService } from '../services/pokemon.service';
+import { FavoriteService } from '../services/favorite.service';
+import { addIcons } from 'ionicons';
+import { heartOutline, heartSharp } from 'ionicons/icons';
 
 @Component({
   selector: 'app-pokemon-details',
@@ -55,17 +60,23 @@ import { PokemonService } from '../services/pokemon.service';
     IonImg,
     IonChip,
     IonProgressBar,
-    IonSpinner // <-- Adicione esta linha ao array de imports
+    IonSpinner,
+    IonIcon,
+    IonButton
   ],
 })
 export class PokemonDetailsPage implements OnInit {
   pokemonId: string | null = null;
   pokemonDetails: any = null;
+  isFavorite: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
-    private pokemonService: PokemonService
-  ) {}
+    private pokemonService: PokemonService,
+    private favoriteService: FavoriteService
+  ) {
+    addIcons({ heartOutline, heartSharp });
+  }
 
   ngOnInit() {
     this.pokemonId = this.route.snapshot.paramMap.get('id');
@@ -79,10 +90,33 @@ export class PokemonDetailsPage implements OnInit {
       next: (data) => {
         this.pokemonDetails = data;
         console.log('Detalhes do Pokémon:', this.pokemonDetails);
+        this.checkFavoriteStatus();
       },
       error: (err) => {
         console.error('Erro ao carregar detalhes do Pokémon:', err);
       }
     });
+  }
+
+  async checkFavoriteStatus() {
+    if (this.pokemonDetails) {
+      this.isFavorite = await this.favoriteService.isFavorite(this.pokemonDetails.id);
+      console.log(`Detalhes: ${this.pokemonDetails.name} (ID: ${this.pokemonDetails.id}) é favorito? ${this.isFavorite}`);
+    }
+  }
+
+  async toggleFavorite() {
+    console.log(`Detalhes: Tentando alternar favorito para ${this.pokemonDetails.name}. Status atual: ${this.isFavorite}`);
+    if (this.pokemonDetails) {
+      if (this.isFavorite) {
+        await this.favoriteService.removeFavorite(this.pokemonDetails.id);
+        console.log(`Detalhes: Chamou removeFavorite para ID: ${this.pokemonDetails.id}`);
+      } else {
+        await this.favoriteService.addFavorite(this.pokemonDetails);
+        console.log(`Detalhes: Chamou addFavorite para ID: ${this.pokemonDetails.id}`);
+      }
+      this.isFavorite = !this.isFavorite; // Inverte o estado na UI
+      console.log(`Detalhes: Novo status favorito para ${this.pokemonDetails.name}: ${this.isFavorite}`);
+    }
   }
 }

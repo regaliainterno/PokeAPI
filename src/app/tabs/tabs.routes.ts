@@ -1,35 +1,35 @@
 import { Routes } from '@angular/router';
-import { TabsPage } from './tabs.page'; // Importa o componente da página de abas
+import { TabsPage } from './tabs.page';
 
 export const routes: Routes = [
   {
     path: 'tabs',
-    component: TabsPage, // Componente pai das abas
-    children: [ // Rotas filhas para cada aba
+    component: TabsPage,
+    children: [
       {
         path: 'tab1',
-        loadComponent: () => // lazy loading para o componente standalone Tab1Page
-          import('../tab1/tab1.page').then(m => m.Tab1Page), // <-- CORRIGIDO AQUI
+        loadComponent: () =>
+          import('../tab1/tab1.page').then(m => m.Tab1Page),
       },
       {
         path: 'tab2',
-        loadComponent: () => // lazy loading para o componente standalone Tab2Page
-          import('../tab2/tab2.page').then(m => m.Tab2Page), // <-- CORRIGIDO AQUI
+        loadComponent: () =>
+          import('../tab2/tab2.page').then(m => m.Tab2Page),
       },
       {
         path: 'tab3',
-        loadComponent: () => // lazy loading para o componente standalone Tab3Page
-          import('../tab3/tab3.page').then(m => m.Tab3Page), // <-- CORRIGIDO AQUI
+        loadComponent: () =>
+          import('../tab3/tab3.page').then(m => m.Tab3Page),
       },
       {
-        path: '', // Redireciona a rota pai das abas para a tab1 por padrão
+        path: '',
         redirectTo: '/tabs/tab1',
         pathMatch: 'full',
       },
     ],
   },
   {
-    path: '', // Redireciona a rota raiz para a tab1 por padrão
+    path: '',
     redirectTo: '/tabs/tab1',
     pathMatch: 'full',
   },
