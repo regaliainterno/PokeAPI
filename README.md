@@ -54,6 +54,24 @@ A versão final e totalmente funcional, com a funcionalidade de favoritos robust
 
 ---
 
+## Demonstração Visual
+
+Aqui você pode ver algumas capturas de tela da aplicação em funcionamento.
+
+### Lista Principal de Pokémons
+
+Uma visão geral da tela principal, com a lista de Pokémons e o indicador de favoritos.
+
+![Captura de tela da lista principal de Pokémons](img1.png "Lista de Pokémons")
+
+### Detalhes do Pokémon
+
+A tela de detalhes de um Pokémon, destacando o layout de "carta" e as informações adicionais.
+
+![Captura de tela da tela de detalhes do Pokémon](img2.png "Tela de Detalhes do Pokémon")
+
+---
+
 #Status Atual: Projeto Funcional e Completo
 
 Todas as funcionalidades do escopo inicial foram implementadas e estão operacionais. O aplicativo oferece uma experiência fluida para explorar Pokémons, com favoritos persistentes e uma interface responsiva.
